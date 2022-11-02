@@ -1,3 +1,5 @@
+import os
+
 class TextIterator():
     def __init__(self, filename:str = None)->None:
         self.filename = str(filename)
@@ -6,9 +8,13 @@ class TextIterator():
         self.linepointer = 0
 
     def _loaddata(self)->None:
-        with open(self.filename) as file:
-            for line in file:
-                self.Lines.append(line)
+        try:
+            with open(self.filename, 'r') as txt:
+                for line in txt:
+                    self.Lines.append(line)
+        except FileNotFoundError:
+            print(os.getcwd())
+            
     
     class textiteriter:
         def __init__(self, data:list)->None:
@@ -31,16 +37,16 @@ class TextIterator():
 
     def getnext(self)-> str:
         self.linepointer += 1
-        self.linepointer = self.linepointer % len(self.Lines) -1
+        self.linepointer = self.linepointer % len(self.Lines)
         return self.getline()
     
     def getprevious(self)->str:
         if self.linepointer == 0:
             self.linepointer = len(self.Lines)-1
-            self.getLine()
+            return self.getline()
         else:
-            self.linepointer +=1
-            self.getLine()
+            self.linepointer -=1
+            return self.getline()
 
     def getfirst(self)->str:
         return self.Lines[0]
@@ -52,14 +58,19 @@ class TextIterator():
 class TIDemo():
     def __init__(self):
         self.TextIter = TextIterator(self.getFilename())
-        pass
+        self.menu()
 
     def getFilename(self)->str:
         return input("What is the filename, include extention:\n")
 
+    def beemov(self):
+        self.TextIter.filename = "bee movie script.txt"
+        self.TextIter.Lines = []
+        self.TextIter._loaddata()
+
     def menu(self):
         run = True
-        commands = "First : to get first line\nPrev : to get previous line\nNext : to get the next line\nLast to get the last line\nquit : to stop running\nHelp : to see this list"
+        commands = "First : to get first line\nPrev : to get previous line\nNext : to get the next line\nLast to get the last line\nQuit : to stop running\nHelp : to see this list"
         while(run):
             intext = input("Enter a command:")
             
@@ -76,6 +87,8 @@ class TIDemo():
                     run = False
                 case "Help":
                     print(commands)
+                case "Bee":
+                    self.beemov()
                 case _:
                     print(commands)
         
