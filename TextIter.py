@@ -5,15 +5,17 @@ class TextIterator():
         self.filename = str(filename)
         self.Lines = []
         self._loaddata()
-        self.linepointer = 0
+        self.linepointer = -1
 
     def _loaddata(self)->None:
         try:
             with open(self.filename, 'r') as txt:
                 for line in txt:
                     self.Lines.append(line)
+            print("\n" +self.filename + " loaded successfully\n")
         except FileNotFoundError:
-            print(os.getcwd())
+            print("\n"+ self.filename+ " Not found")
+            raise FileNotFoundError
             
     
     class textiteriter:
@@ -57,8 +59,12 @@ class TextIterator():
     
 class TIDemo():
     def __init__(self):
-        self.TextIter = TextIterator(self.getFilename())
-        self.menu()
+        try:
+            self.TextIter = TextIterator(self.getFilename())
+            h=False
+            self.menu()
+        except FileNotFoundError:
+            pass
 
     def getFilename(self)->str:
         return input("What is the filename, include extention:\n")
@@ -70,24 +76,24 @@ class TIDemo():
 
     def menu(self):
         run = True
-        commands = "First : to get first line\nPrev : to get previous line\nNext : to get the next line\nLast to get the last line\nQuit : to stop running\nHelp : to see this list"
+        commands = "First : to get first line\nPrev : to get previous line\nNext : to get the next line\nLast : to get the last line\nQuit : to stop running\nHelp : to see this list"
         while(run):
-            intext = input("Enter a command:")
+            intext = input("Enter a command:").lower()
             
             match intext:
-                case "First":
+                case "first":
                     print(self.TextIter.getfirst())
-                case "Last":
+                case "last":
                     print(self.TextIter.getlast())
-                case "Next":
+                case "next":
                     print(self.TextIter.getnext())
-                case "Prev":
+                case "prev":
                     print(self.TextIter.getprevious())
-                case "Quit":
+                case "quit":
                     run = False
-                case "Help":
+                case "help":
                     print(commands)
-                case "Bee":
+                case "bee":
                     self.beemov()
                 case _:
                     print(commands)
@@ -97,3 +103,4 @@ class TIDemo():
 
 if __name__ == "__main__":
     Demo = TIDemo()
+    
